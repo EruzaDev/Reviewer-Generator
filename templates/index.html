@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/static/logo.png" type="image/png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meow~</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    @font-face {
+      font-family: 'CatPaw';
+      src: url('static/fonts/CatPaw-zr0OG.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'CatPaw', Arial, sans-serif;
+      font-weight: bold; /* optional */
+      font-size: 4rem; /* optional */
+      margin-bottom: 1rem;
+    }
+
+    .upload-box {
+      border: 2px dashed #ccc;
+      padding: 2rem;
+      border-radius: 12px;
+      background-color: #fff;
+      transition: background 0.3s, border 0.3s;
+      color: inherit;
+    }
+
+    .upload-box.dragover {
+      background-color: #f0f8ff;
+    }
+
+    .upload-box input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .upload-label:hover {
+      background-color: #0056b3;
+    }
+
+    .spinner {
+      display: none;
+      margin-top: 1.5rem;
+    }
+
+    .spinner.show {
+      display: block;
+    }
+
+    .spinner div {
+      width: 18px;
+      height: 18px;
+      margin: 2px;
+      background-color: #007bff;
+      border-radius: 100%;
+      display: inline-block;
+      animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    }
+
+    .spinner .bounce1 { animation-delay: -0.32s; }
+    .spinner .bounce2 { animation-delay: -0.16s; }
+
+    @keyframes sk-bouncedelay {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1.0); }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: #eee;
+      }
+
+      .upload-box {
+        background-color: #1e1e1e;
+        border-color: #444;
+      }
+
+      .upload-label {
+        background-color: #3399ff;
+        color: #fff;
+      }
+
+      .upload-label:hover {
+        background-color: #1c7ed6;
+      }
+
+      h1 {
+        color: #fff;
+      }
+
+      .upload-box.dragover {
+        background-color: #2a2a2a;
+      }
+
+      .spinner div {
+        background-color: #3399ff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="/static/logo.png" alt="Logo" width="100" height="auto" />
+  <div class="container">
+    <h1>Catify Reviewer</h1>
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+      <div class="upload-box" id="dropArea">
+        <p>Drag & drop your PDF here</p>
+        <label class="upload-label">
+          Or choose a file
+          <input type="file" name="pdf_file" id="fileInput" accept="application/pdf">
+        </label>
+      </div>
+      <div class="spinner" id="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const uploadForm = document.getElementById('uploadForm');
+    const spinner = document.getElementById('spinner');
+
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.classList.remove('dragover');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        uploadForm.submit();
+        spinner.classList.add('show');
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        uploadForm.submit();
+        spinner.classList.add('show');
+      }
+    });
+  </script>
+</body>
+</html>
